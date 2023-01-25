@@ -1,22 +1,41 @@
-import React from 'react'
-import './NewExpense.css'
-import "./ExpenseForm"
-import ExpenseForm from './ExpenseForm'
+import React, { useState } from "react";
+import "./NewExpense.css";
+import "./ExpenseForm";
+import ExpenseForm from "./ExpenseForm";
 
-const NewExpense = (props) =>{
-    const saveExpenseDataHandler = (enteredExpenseData) =>{
-        const expenseData = {
-            ...enteredExpenseData,
-            id: Math.random().toString()
-        }
-        props.onAddExpense(expenseData)
-    }
-    return(
-    <div className='new-expense'>
-        <ExpenseForm onSaveExpenseData={saveExpenseDataHandler}/> 
-        {/* passo il puntatore della funzione */}
+const NewExpense = (props) => {
+  const [isEditing, setIsEditing] = useState(false);
+  console.log("isEditing");
+  console.log(isEditing);
+  const saveExpenseDataHandler = (enteredExpenseData) => {
+    const expenseData = {
+      ...enteredExpenseData,
+      id: Math.random().toString(),
+    };
+    props.onAddExpense(expenseData);
+    setIsEditing(false);
+  };
+  const startEditingHandler = () => {
+    setIsEditing(true);
+  };
+
+  const stopEditingHandler = () => {
+    setIsEditing(false);
+  };
+  return (
+    <div className="new-expense">
+      {!isEditing && (
+        <button onClick={startEditingHandler}>Add new expense</button>
+      )}
+      {isEditing && (
+        <ExpenseForm
+          onCancel={stopEditingHandler}
+          onSaveExpenseData={saveExpenseDataHandler}
+        />
+      )}
+      {/* passo il puntatore della funzione */}
     </div>
-    )
-}
+  );
+};
 
-export default NewExpense
+export default NewExpense;
